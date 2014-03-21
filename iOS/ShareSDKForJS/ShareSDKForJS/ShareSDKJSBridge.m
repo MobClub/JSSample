@@ -69,20 +69,20 @@
 static ShareSDKJSBridge *_instance = nil;
 static UIView *_refView = nil;
 
-//@interface UIWebView (JavaScriptAlert)
-//
-//- (void)webView:(UIWebView *)sender runJavaScriptAlertPanelWithMessage:(NSString *)message initiatedByFrame:(id)frame;
-//
-//@end
-//
-//@implementation UIWebView (JavaScriptAlert)
-//
-//- (void)webView:(UIWebView *)sender runJavaScriptAlertPanelWithMessage:(NSString *)message initiatedByFrame:(id)frame
-//{
-//    NSLog(@"%@", message);
-//}
-//
-//@end
+@interface UIWebView (JavaScriptAlert)
+
+- (void)webView:(UIWebView *)sender runJavaScriptAlertPanelWithMessage:(NSString *)message initiatedByFrame:(id)frame;
+
+@end
+
+@implementation UIWebView (JavaScriptAlert)
+
+- (void)webView:(UIWebView *)sender runJavaScriptAlertPanelWithMessage:(NSString *)message initiatedByFrame:(id)frame
+{
+    NSLog(@"%@", message);
+}
+
+@end
 
 @interface ShareSDKJSBridge ()
 {
@@ -467,6 +467,8 @@ static UIView *_refView = nil;
         default:
             break;
     }
+    
+    [ShareSDK connectPlatformWithType:type platform:nil appInfo:config];
     
     //返回
     NSDictionary *responseDict = @{@"seqId": [NSNumber numberWithInteger:[seqId integerValue]],

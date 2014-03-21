@@ -21,6 +21,7 @@
 
     var _firstRequest = null;
     var _lastRequest = null;
+    var jsLog = null;
 
     /**
      * SDK方法名称
@@ -142,6 +143,10 @@
          */
         this.callMethod = function(request)
         {
+            jsLog.log("js request: " + request.method);
+            jsLog.log("    seqId = " + request.seqId.toString());
+            jsLog.log("    api = " + request.method);
+            jsLog.log("    data = " + objectToJsonString(request.params));
             window.JSInterface.jsCallback(request.seqId.toString(), request.method, objectToJsonString(request.params), "$sharesdk._callback");
         };
 
@@ -166,16 +171,18 @@
          */
         this.callback = function (response)
         {
+            var logMsg = "java returns: " + JSON.stringify(response);
+            jsLog.log(logMsg);
+
             if (response.callback)
             {
+                jsLog.log("callback = " + response.callback);
                 var callbackFunc = eval(response.callback);
-                if (callbackFunc)
-                {
-                    var method = response.method;
-                }
 
                 if (callbackFunc)
                 {
+                    var method = response.method;
+
                     switch (method)
                     {
                         case ShareSDKMethodName.Authorize:
@@ -215,6 +222,7 @@
         {
             this._requestes[request.seqId] = request;
             window.location.href = "sharesdk://call?seqId=" + request.seqId + "&methodName=" + request.method;
+
         };
 
         /**
@@ -241,13 +249,10 @@
             if (response.callback)
             {
                 var callbackFunc = eval(response.callback);
-                if (callbackFunc)
-                {
-                    var method = response.method;
-                }
 
                 if (callbackFunc)
                 {
+                    var method = response.method;
                     switch (method)
                     {
                         case ShareSDKMethodName.Authorize:
@@ -386,11 +391,16 @@
      * @param callback  回调方法
      * @private
      */
-    ShareSDK._checkInit = function (callback)
+    ShareSDK._checkInit = function (method, params, callback)
     {
         if (_apiCaller == null)
         {
-            _initCallbackFuncs.push(callback);
+            _initCallbackFuncs.push({
+                "method" : method,
+                "params" : params,
+                "callback" : callback
+            });
+
             if (!_isSendInitRequest)
             {
                 window.location.href = "sharesdk://init";
@@ -401,7 +411,7 @@
         {
             if (callback)
             {
-                callback ();
+                callback (method, params);
             }
         }
     };
@@ -414,7 +424,7 @@
      */
     ShareSDK._callMethod = function (method, params)
     {
-        ShareSDK._checkInit(function () {
+        ShareSDK._checkInit(method, params, function (method, params) {
 
             _seqId ++;
             var req = new RequestInfo(_seqId, method, params);
@@ -445,9 +455,15 @@
             _running = true;
             _apiCaller.callMethod(_firstRequest);
 
-            //直接发送下一个请求
-            ShareSDK._nextRequest();
-            ShareSDK._sendRequest();
+            setTimeout(function(){
+
+                _running = false;
+                //直接发送下一个请求
+                ShareSDK._nextRequest();
+                ShareSDK._sendRequest();
+
+            }, 50);
+
         }
     };
 
@@ -479,9 +495,20 @@
         switch (platform)
         {
             case 1:
+                jsLog = {
+                    log: function(msg) {
+                        window.JSInterface.jsLog(msg);
+                    }
+                };
+                jsLog.log("found platform type: Android");
                 _apiCaller = new AndroidAPICaller();
                 break;
             case 2:
+                jsLog = {
+                    log: function(msg) {
+
+                    }
+                };
                 _apiCaller = new iOSAPICaller();
                 break;
         }
@@ -489,7 +516,8 @@
         //派发回调
         for (var i = 0; i < _initCallbackFuncs.length; i++)
         {
-            _initCallbackFuncs[i] ();
+            var obj = _initCallbackFuncs[i];
+            obj.callback (obj.method, obj.params);
         }
         _initCallbackFuncs.splice(0);
     };
@@ -599,7 +627,7 @@
             "callback" : "(" + callback.toString() + ")"
         };
 
-        ShareSDK._callback(ShareSDKMethodName.HasAuthorized, params);
+        ShareSDK._callMethod(ShareSDKMethodName.HasAuthorized, params);
 
     };
 
