@@ -10,6 +10,13 @@
         function init()
         {
             $sharesdk.open("iosv1101", true);
+
+            var sinaConf = {};
+            sinaConf["app_key"] = "568898243";
+            sinaConf["app_secret"] = "38a4f8204cc784f81f9f0daaf31e02e3";
+            sinaConf["redirect_uri"] = "http://www.sharesdk.cn";
+            $sharesdk.setPlatformConfig($sharesdk.platformID.SinaWeibo, sinaConf);
+
         }
 
         function authBtnClickHandler()
@@ -17,6 +24,15 @@
             $sharesdk.authorize($sharesdk.platformID.SinaWeibo, function (platform, state, error){
 
                 alert("state = " + state + "\nerror = " + error);
+
+            });
+        }
+
+        function hasAuthBtnClickHandler()
+        {
+            $sharesdk.hasAuthorized($sharesdk.platformID.SinaWeibo, function (platform, hasAuth) {
+
+                alert("hasAuth = " + hasAuth);
 
             });
         }
@@ -40,7 +56,7 @@
                 "description" : "测试的描述",
                 "site" : "ShareSDK",
                 "siteUrl" : "http://sharesdk.cn",
-                "type" : 1
+                "type" : $sharesdk.contentType.Text
             };
 
             $sharesdk.shareContent($sharesdk.platformID.SinaWeibo, params, function (platform, state, shareInfo, error) {
@@ -83,7 +99,7 @@
                 "type" : 1
             };
 
-            $sharesdk.showShareMenu(null, params, 0, 0, $sharesdk.shareMenuArrowDirection.Any, function (platform, state, shareInfo, error) {
+            $sharesdk.showShareMenu(null, params, 100, 100, $sharesdk.shareMenuArrowDirection.Any, function (platform, state, shareInfo, error) {
 
                 alert("state = " + state + "\nshareInfo = " + shareInfo + "\nerror = " + error);
 
@@ -115,6 +131,7 @@
 <body onload="init()" style="text-align: center">
     <br/><br/>
     <input type="button" value="授权" onclick="authBtnClickHandler()" style="width: 200px; height: 30px;" /><br /><br/>
+    <input type="button" value="是否授权" onclick="hasAuthBtnClickHandler()" style="width: 200px; height: 30px;" /><br /><br/>
     <input type="button" value="获取用户信息" onclick="userInfoBtnClickHandler()" style="width: 200px; height: 30px;" /><br /><br/>
     <input type="button" value="分享内容" onclick="shareContentClickHandler()" style="width: 200px; height: 30px;" /><br /><br/>
     <input type="button" value="一键分享内容" onclick="oneKeyShareContentClickHandler()" style="width: 200px; height: 30px;" /><br /><br/>
