@@ -65,9 +65,10 @@
 #import "YXApi.h"
 #endif
 
-
 static ShareSDKJSBridge *_instance = nil;
 static UIView *_refView = nil;
+
+#ifdef DEBUG
 
 @interface UIWebView (JavaScriptAlert)
 
@@ -83,6 +84,8 @@ static UIView *_refView = nil;
 }
 
 @end
+
+#endif
 
 @interface ShareSDKJSBridge ()
 {
