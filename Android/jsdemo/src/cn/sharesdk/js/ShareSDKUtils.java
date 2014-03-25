@@ -229,15 +229,15 @@ public class ShareSDKUtils extends WebViewClient implements Callback {
 	}
 	
 	private void setPlatformConfig(HashMap<String, Object> params) {
-		try {
-			int platformId = (Integer) params.get("platform");
-			String platform = ShareSDK.platformIdToName(platformId);
-			@SuppressWarnings("unchecked")
-			HashMap<String, Object> devInfo = (HashMap<String, Object>) params.get("config");
-			ShareSDK.setPlatformDevInfo(platform, devInfo);
-		} catch (Throwable t) {
-			t.printStackTrace();
-		}
+//		try {
+//			int platformId = (Integer) params.get("platform");
+//			String platform = ShareSDK.platformIdToName(platformId);
+//			@SuppressWarnings("unchecked")
+//			HashMap<String, Object> devInfo = (HashMap<String, Object>) params.get("config");
+//			ShareSDK.setPlatformDevInfo(platform, devInfo);
+//		} catch (Throwable t) {
+//			t.printStackTrace();
+//		}
 	}
 	
 	private void authorize(String seqId, String api, String callback, String oriCallback, HashMap<String, Object> params) {

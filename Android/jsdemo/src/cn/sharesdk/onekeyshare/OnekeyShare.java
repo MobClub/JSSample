@@ -8,8 +8,8 @@
 
 package cn.sharesdk.onekeyshare;
 
-import static cn.sharesdk.framework.utils.R.getBitmapRes;
-import static cn.sharesdk.framework.utils.R.getStringRes;
+import static cn.sharesdk.framework.utils.R.*;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -234,6 +234,16 @@ public class OnekeyShare extends FakeActivity implements
 	/** 添加一个隐藏的platform */
 	public void addHiddenPlatform(String platform) {
 		hiddenPlatforms.put(platform, platform);
+	}
+
+	/** 设置一个将被截图分享的View */
+	public void setViewToShare(View viewToShare) {
+		try {
+			String path = saveViewToImage(viewToShare);
+			reqMap.put("viewToShare", path);
+		} catch (Throwable e) {
+			e.printStackTrace();
+		}
 	}
 
 	public void onCreate() {
