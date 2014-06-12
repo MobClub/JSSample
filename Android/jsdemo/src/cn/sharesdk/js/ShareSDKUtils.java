@@ -31,16 +31,13 @@ public class ShareSDKUtils extends WebViewClient implements Callback {
 	public static final int MSG_LOAD_URL = 1; // load js script
 	public static final int MSG_JS_CALL = 2; // process js callback on ui thread
 	
-	private static ShareSDKUtils instance;
 	private WebView webview;
 	private SSDKWebViewClient wvClient;
 	private Hashon hashon;
 	private Context context;
 	
-	public static void prepare(WebView webview, WebViewClient wvClient) {
-		if (instance == null) {
-			instance = new ShareSDKUtils(webview, wvClient);
-		}
+	public static ShareSDKUtils prepare(WebView webview, WebViewClient wvClient) {
+		return new ShareSDKUtils(webview, wvClient);
 	}
 	
 	private ShareSDKUtils(WebView webview, WebViewClient wbClient) {
