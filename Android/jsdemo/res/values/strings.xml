@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">ShareSDK for JS</string>
+    <string name="app_name">ShareSDK</string>
     
     <string name="more">更多</string>
     <string name="sm_item_demo">接口</string>
@@ -9,7 +9,7 @@
     <string name="sm_item_customer">自定义接口</string>
     <string name="sm_item_fl_weibo">关注新浪微博</string>
     <string name="sm_item_fl_tc">关注腾讯微博</string>
-    <string name="sm_item_visit_wechat">关注官方微信</string>
+    <string name="sm_item_share_view">摇一摇截屏分享</string>
     <string name="sm_item_visit_website">关注官方网站</string>
     <string name="sm_item_about">Demo版本 Ver. %s</string>
     <string name="plz_choose_wechat">请选择微信客户端完成操作</string>

@@ -371,6 +371,10 @@ public class ShareSDKUtils extends WebViewClient implements Callback {
 			pa.setOriCallback(oriCallback);
 			pa.setApi(api);
 			oks.setCallback(pa);
+			oks.setDialogMode();
+			if (webview != null) {
+				oks.setEditPageBackground(webview);
+			}
 			oks.show(context);
 		}
 		return null;
@@ -415,6 +419,10 @@ public class ShareSDKUtils extends WebViewClient implements Callback {
 			int platform = (Integer) params.get("platform");
 			String platformName = ShareSDK.platformIdToName(platform);
 			oks.setPlatform(platformName);
+			oks.setDialogMode();
+			if (webview != null) {
+				oks.setEditPageBackground(webview);
+			}
 			oks.show(context);
 		}
 		return null;
