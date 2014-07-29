@@ -326,16 +326,19 @@ static UIView *_refView = nil;
         
         if (siteUrlStr || siteStr)
         {
-            [contentObj addQQSpaceUnitWithTitle:INHERIT_VALUE
-                                            url:INHERIT_VALUE
-                                           site:siteStr
-                                        fromUrl:siteUrlStr
-                                        comment:INHERIT_VALUE
-                                        summary:INHERIT_VALUE
-                                          image:INHERIT_VALUE
-                                           type:INHERIT_VALUE
-                                        playUrl:INHERIT_VALUE
-                                           nswb:INHERIT_VALUE];
+            if ([ShareSDK getClientWithType:ShareTypeQQSpace])
+            {
+                [contentObj addQQSpaceUnitWithTitle:INHERIT_VALUE
+                                                url:INHERIT_VALUE
+                                               site:siteStr
+                                            fromUrl:siteUrlStr
+                                            comment:INHERIT_VALUE
+                                            summary:INHERIT_VALUE
+                                              image:INHERIT_VALUE
+                                               type:INHERIT_VALUE
+                                            playUrl:INHERIT_VALUE
+                                               nswb:INHERIT_VALUE];
+            }
         }
         
         NSString *extInfoStr = nil;
@@ -355,36 +358,45 @@ static UIView *_refView = nil;
         
         if (extInfoStr || musicUrlStr)
         {
-            [contentObj addWeixinSessionUnitWithType:INHERIT_VALUE
+            f ([ShareSDK getClientWithType:ShareTypeWeixiSession])
+            {
+                [contentObj addWeixinSessionUnitWithType:INHERIT_VALUE
+                                                 content:INHERIT_VALUE
+                                                   title:INHERIT_VALUE
+                                                     url:INHERIT_VALUE
+                                                   image:INHERIT_VALUE
+                                            musicFileUrl:musicUrlStr
+                                                 extInfo:extInfoStr
+                                                fileData:INHERIT_VALUE
+                                            emoticonData:INHERIT_VALUE];
+            }
+            
+            if ([ShareSDK getClientWithType:ShareTypeWeixiTimeline])
+            {
+                [contentObj addWeixinTimelineUnitWithType:INHERIT_VALUE
+                                                  content:INHERIT_VALUE
+                                                    title:INHERIT_VALUE
+                                                      url:INHERIT_VALUE
+                                                    image:INHERIT_VALUE
+                                             musicFileUrl:musicUrlStr
+                                                  extInfo:extInfoStr
+                                                 fileData:INHERIT_VALUE
+                                             emoticonData:INHERIT_VALUE];
+            }
+            
+            if ([ShareSDK getClientWithType:ShareTypeWeixiFav])
+            {
+                [contentObj addWeixinFavUnitWithType:INHERIT_VALUE
                                              content:INHERIT_VALUE
                                                title:INHERIT_VALUE
                                                  url:INHERIT_VALUE
+                                          thumbImage:INHERIT_VALUE
                                                image:INHERIT_VALUE
                                         musicFileUrl:musicUrlStr
                                              extInfo:extInfoStr
                                             fileData:INHERIT_VALUE
                                         emoticonData:INHERIT_VALUE];
-            
-            [contentObj addWeixinTimelineUnitWithType:INHERIT_VALUE
-                                              content:INHERIT_VALUE
-                                                title:INHERIT_VALUE
-                                                  url:INHERIT_VALUE
-                                                image:INHERIT_VALUE
-                                         musicFileUrl:musicUrlStr
-                                              extInfo:extInfoStr
-                                             fileData:INHERIT_VALUE
-                                         emoticonData:INHERIT_VALUE];
-            
-            [contentObj addWeixinFavUnitWithType:INHERIT_VALUE
-                                         content:INHERIT_VALUE
-                                           title:INHERIT_VALUE
-                                             url:INHERIT_VALUE
-                                      thumbImage:INHERIT_VALUE
-                                           image:INHERIT_VALUE
-                                    musicFileUrl:musicUrlStr
-                                         extInfo:extInfoStr
-                                        fileData:INHERIT_VALUE
-                                    emoticonData:INHERIT_VALUE];
+            }
         }
     }
     
