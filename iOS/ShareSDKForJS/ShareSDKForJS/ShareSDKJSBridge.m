@@ -358,7 +358,7 @@ static UIView *_refView = nil;
         
         if (extInfoStr || musicUrlStr)
         {
-            f ([ShareSDK getClientWithType:ShareTypeWeixiSession])
+            if ([ShareSDK getClientWithType:ShareTypeWeixiSession])
             {
                 [contentObj addWeixinSessionUnitWithType:INHERIT_VALUE
                                                  content:INHERIT_VALUE
