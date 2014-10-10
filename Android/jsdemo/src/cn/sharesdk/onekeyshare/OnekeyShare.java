@@ -1,19 +1,13 @@
 /*
- * Offical Website:http://www.ShareSDK.cn
+ * Offical Website:http://www.mob.com
  * Support QQ: 4006852216
  * Offical Wechat Account:ShareSDK   (We will inform you our updated news at the first time by Wechat, if we release a new version. If you get any problem, you can also contact us with Wechat, we will reply you within 24 hours.)
  *
- * Copyright (c) 2013 ShareSDK.cn. All rights reserved.
+ * Copyright (c) 2013 mob.com. All rights reserved.
  */
 
 package cn.sharesdk.onekeyshare;
 
-import static cn.sharesdk.framework.utils.R.*;
-import static cn.sharesdk.framework.utils.BitmapHelper.*;
-import java.io.File;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map.Entry;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -22,8 +16,8 @@ import android.content.Intent;
 import android.content.pm.ResolveInfo;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
-import android.os.Message;
 import android.os.Handler.Callback;
+import android.os.Message;
 import android.text.TextUtils;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -32,19 +26,29 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.animation.Animation;
-import android.view.animation.TranslateAnimation;
 import android.view.animation.Animation.AnimationListener;
+import android.view.animation.TranslateAnimation;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.FrameLayout.LayoutParams;
 import android.widget.LinearLayout;
 import android.widget.Toast;
-import android.widget.FrameLayout.LayoutParams;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map.Entry;
+
 import cn.sharesdk.framework.CustomPlatform;
 import cn.sharesdk.framework.FakeActivity;
 import cn.sharesdk.framework.Platform;
 import cn.sharesdk.framework.PlatformActionListener;
 import cn.sharesdk.framework.ShareSDK;
 import cn.sharesdk.framework.utils.UIHandler;
+
+import static cn.sharesdk.framework.utils.BitmapHelper.captureView;
+import static cn.sharesdk.framework.utils.R.getBitmapRes;
+import static cn.sharesdk.framework.utils.R.getStringRes;
 
 /**
  * entrance of onekeyshare
@@ -188,6 +192,16 @@ public class OnekeyShare extends FakeActivity implements
 	/** Setting the selected platform of EditPage when initializing */
 	public void setPlatform(String platform) {
 		reqMap.put("platform", platform);
+	}
+
+	/** Setting the selected platform of KakaoTalk ，go to the url when click the share msg */
+	public void setInstallUrl(String installurl) {
+		reqMap.put("installurl", installurl);
+	}
+
+	/** Setting the selected platform of KakaoTalk  ，open the app-url when click the share msg */
+	public void setExecuteUrl(String executeurl) {
+		reqMap.put("executeurl", executeurl);
 	}
 
 	/** setting custom external callback */
@@ -450,22 +464,32 @@ public class OnekeyShare extends FakeActivity implements
 			Platform plat = ent.getKey();
 			plat.SSOSetting(disableSSO);
 			String name = plat.getName();
-			boolean isWechat = "WechatMoments".equals(name) || "Wechat".equals(name)
-					|| "WechatFavorite".equals(name);
-			if (isWechat && !plat.isValid()) {
-				Message msg = new Message();
-				msg.what = MSG_TOAST;
-				int resId = getStringRes(getContext(), "wechat_client_inavailable");
-				msg.obj = activity.getString(resId);
-				UIHandler.sendMessage(msg, this);
-				continue;
-			}
 
 			boolean isGooglePlus = "GooglePlus".equals(name);
 			if (isGooglePlus && !plat.isValid()) {
 				Message msg = new Message();
 				msg.what = MSG_TOAST;
 				int resId = getStringRes(getContext(), "google_plus_client_inavailable");
+				msg.obj = activity.getString(resId);
+				UIHandler.sendMessage(msg, this);
+				continue;
+			}
+
+			boolean isKakaoTalk = "KakaoTalk".equals(name);
+			if (isKakaoTalk && !plat.isValid()) {
+				Message msg = new Message();
+				msg.what = MSG_TOAST;
+				int resId = getStringRes(getContext(), "kakaotalk_client_inavailable");
+				msg.obj = activity.getString(resId);
+				UIHandler.sendMessage(msg, this);
+				continue;
+			}
+
+			boolean isKakaoStory = "KakaoStory".equals(name);
+			if (isKakaoStory && !plat.isValid()) {
+				Message msg = new Message();
+				msg.what = MSG_TOAST;
+				int resId = getStringRes(getContext(), "kakaostory_client_inavailable");
 				msg.obj = activity.getString(resId);
 				UIHandler.sendMessage(msg, this);
 				continue;
@@ -545,7 +569,7 @@ public class OnekeyShare extends FakeActivity implements
 
 			if (!started) {
 				started = true;
-				if (equals(callback)) {
+				if (this == callback) {
 					int resId = getStringRes(getContext(), "sharing");
 					if (resId > 0) {
 						showNotification(2000, getContext().getString(resId));
@@ -636,7 +660,17 @@ public class OnekeyShare extends FakeActivity implements
 							if (resId > 0) {
 								showNotification(2000, getContext().getString(resId));
 							}
-						} else {
+						} else if ("KakaoTalkClientNotExistException".equals(expName)) {
+							int resId = getStringRes(getContext(), "kakaotalk_client_inavailable");
+							if (resId > 0) {
+								showNotification(2000, getContext().getString(resId));
+							}
+						}else if ("KakaoStoryClientNotExistException".equals(expName)) {
+							int resId = getStringRes(getContext(), "kakaostory_client_inavailable");
+							if (resId > 0) {
+								showNotification(2000, getContext().getString(resId));
+							}
+						}else {
 							int resId = getStringRes(getContext(), "share_failed");
 							if (resId > 0) {
 								showNotification(2000, getContext().getString(resId));
@@ -694,4 +728,9 @@ public class OnekeyShare extends FakeActivity implements
 		}
 	}
 
+	/** QQ,QZone login after send weibo */
+	public void setShareFromQQAuthSupport(boolean shareFromQQLogin)
+	{
+		reqMap.put("isShareTencentWeibo", shareFromQQLogin);
+	}
 }
