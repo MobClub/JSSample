@@ -255,7 +255,7 @@ public class ShareSDKUtils extends WebViewClient implements Callback {
 		int platformId = (Integer) params.get("platform");
 		String platformName = ShareSDK.platformIdToName(platformId);
 		Platform platform = ShareSDK.getPlatform(context, platformName);
-		platform.removeAccount();
+		platform.removeAccount(true);
 	}
 	
 	private boolean isVAlid(HashMap<String, Object> params) {
