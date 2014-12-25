@@ -31,6 +31,8 @@
 			Twitter        https://dev.twitter.com
 			人人网          http://dev.renren.com
 			开心网          http://open.kaixin001.com
+			搜狐微博        http://open.t.sohu.com
+			网易微博        http://open.t.163.com
 			豆瓣           http://developers.douban.com
 			
 			有道云笔记      http://note.youdao.com/open/developguide.html#app
@@ -83,9 +85,9 @@
     <!-- 
     	Wechat微信和WechatMoments微信朋友圈的appid是一样的；
     
-                    注意：开发者不能用我们这两个平台的appid,否则分享不了
+                       注意：开发者不能用我们这两个平台的appid,否则分享不了
     
-                     微信测试的时候，微信测试需要先签名打包出apk,
+       	  微信测试的时候，微信测试需要先签名打包出apk,
 		sample测试微信，要先签名打包，keystore在sample项目中，密码123456
 		
 		BypassApproval是绕过审核的标记，设置为true后AppId将被忽略，故不经过
