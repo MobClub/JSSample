@@ -1,5 +1,6 @@
 package cn.sharesdk.js;
 
+import android.webkit.JavascriptInterface;
 import java.util.ArrayList;
 import java.util.HashMap;
 import cn.sharesdk.framework.Platform;
@@ -81,6 +82,7 @@ public class ShareSDKUtils extends WebViewClient implements Callback {
      *   }
      * }
 	 */
+    @JavascriptInterface
 	public void jsCallback(String seqId, String api, String data, String callback) {
 		// this is in webview core thread, not in ui thread
 		Message msg = new Message();
@@ -90,6 +92,7 @@ public class ShareSDKUtils extends WebViewClient implements Callback {
 	}
 	
 	/** receive js log */
+    @JavascriptInterface
 	public void jsLog(String msg) {
 		Log.w("ShareSDK for JS", msg == null ? "" : msg);
 	}
