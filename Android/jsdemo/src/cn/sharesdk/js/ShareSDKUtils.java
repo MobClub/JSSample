@@ -2,6 +2,7 @@ package cn.sharesdk.js;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+
 import cn.sharesdk.framework.Platform;
 import cn.sharesdk.framework.Platform.ShareParams;
 import cn.sharesdk.framework.ShareSDK;
@@ -27,6 +28,8 @@ public class ShareSDKUtils extends WebViewClient implements Callback {
 	private static final String API_MULTI_SHARE = "oneKeyShareContent";
 	private static final String API_ONE_KEY_SHARE = "showShareMenu";
 	private static final String API_SHOW_SHARE_VIEW = "showShareView";
+	private static final String API_GET_FRIEND_LIST = "getFriendList";
+	private static final String API_FOLLOW_FRIEND = "followFriend";
 	
 	public static final int MSG_LOAD_URL = 1; // load js script
 	public static final int MSG_JS_CALL = 2; // process js callback on ui thread
@@ -126,7 +129,6 @@ public class ShareSDKUtils extends WebViewClient implements Callback {
 			onRequestFailed(seqId, api, callback, null, t);
 			return;
 		}
-		
 		String oriCallback = (String) req.get("callback");
 		HashMap<String, Object> resp = new HashMap<String, Object>();
 		resp.put("seqId", seqId);
@@ -161,6 +163,13 @@ public class ShareSDKUtils extends WebViewClient implements Callback {
 			return; // callback by JSPlatfromActionListener
 		} else if (API_SHOW_SHARE_VIEW.equals(api)) {
 			showShareView(seqId, api, callback, oriCallback, req);
+			return; // callback by JSPlatfromActionListener
+		}else if (API_GET_FRIEND_LIST.equals(api)) {
+			getFriendList(seqId, api, callback, oriCallback, req);
+			return; // callback by JSPlatfromActionListener
+		}else if (API_FOLLOW_FRIEND.equals(api)) {
+			jsLog("follow friend");
+			followFriend(seqId, api, callback, oriCallback, req);
 			return; // callback by JSPlatfromActionListener
 		} else {
 			Throwable t = new Throwable("unknown api type: " + api);
@@ -276,11 +285,13 @@ public class ShareSDKUtils extends WebViewClient implements Callback {
 		pa.setOriCallback(oriCallback);
 		pa.setApi(api);
 		platform.setPlatformActionListener(pa);
+		platform.SSOSetting(true);
 		platform.showUser(null);
 	}
 	
 	private void share(String seqId, String api, String callback, String oriCallback, HashMap<String, Object> params) {
 		int platformId = (Integer) params.get("platform");
+		boolean isSSO = (Boolean) params.get("isSSO");
 		String platformName = ShareSDK.platformIdToName(platformId);
 		Platform platform = ShareSDK.getPlatform(context, platformName);
 		JSPlatformActionListener pa = new JSPlatformActionListener();
@@ -295,6 +306,7 @@ public class ShareSDKUtils extends WebViewClient implements Callback {
 		ShareParams sp = new ShareParams(shareParams);
 		int shareType = sp.getShareType();
 		sp.setShareType(iosTypeToAndroidType(shareType));
+		platform.SSOSetting(isSSO);
 		platform.share(sp);
 	}
 	
@@ -364,6 +376,10 @@ public class ShareSDKUtils extends WebViewClient implements Callback {
 			if (map.containsKey("siteUrl")) {
 				oks.setSiteUrl(String.valueOf(map.get("siteUrl")));
 			}
+			boolean isSSO = (Boolean) params.get("isSSO");
+			if(isSSO){
+				oks.disableSSOWhenAuthorize();
+			}
 			JSPlatformActionListener pa = new JSPlatformActionListener();
 			pa.setCallback(this);
 			pa.setSeqId(seqId);
@@ -426,6 +442,42 @@ public class ShareSDKUtils extends WebViewClient implements Callback {
 			oks.show(context);
 		}
 		return null;
+	}
+	
+	private void getFriendList(String seqId, String api, String callback, String oriCallback, HashMap<String, Object> params){
+		int platformId = (Integer) params.get("platform");
+		boolean isSSO = (Boolean) params.get("isSSO");
+		int page = (Integer) params.get("page");
+		int count = (Integer) params.get("count");
+		String account = (String) params.get("account");
+		String platformName = ShareSDK.platformIdToName(platformId);
+		Platform platform = ShareSDK.getPlatform(context, platformName);
+		JSPlatformActionListener pa = new JSPlatformActionListener();
+		pa.setCallback(this);
+		pa.setSeqId(seqId);
+		pa.setJSCallback(callback);
+		pa.setOriCallback(oriCallback);
+		pa.setApi(api);
+		platform.setPlatformActionListener(pa);
+		platform.SSOSetting(isSSO);
+		platform.listFriend(count, page, account);
+	}
+	
+	
+	private void followFriend(String seqId, String api, String callback, String oriCallback, HashMap<String, Object> params){
+		int platformId = (Integer) params.get("platform");
+		String friendName = (String) params.get("friendName");
+		jsLog("friendName = " + friendName);
+		String platformName = ShareSDK.platformIdToName(platformId);
+		Platform platform = ShareSDK.getPlatform(context, platformName);
+		JSPlatformActionListener pa = new JSPlatformActionListener();
+		pa.setCallback(this);
+		pa.setSeqId(seqId);
+		pa.setJSCallback(callback);
+		pa.setOriCallback(oriCallback);
+		pa.setApi(api);
+		platform.setPlatformActionListener(pa);
+		platform.followFriend(friendName);
 	}
 	
 }

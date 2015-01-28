@@ -2,12 +2,14 @@ package cn.sharesdk.js;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+
 import m.framework.utils.Hashon;
 import m.framework.utils.UIHandler;
 import android.os.Handler.Callback;
 import android.os.Message;
 import cn.sharesdk.framework.Platform;
 import cn.sharesdk.framework.PlatformActionListener;
+import cn.sharesdk.framework.PlatformDb;
 import cn.sharesdk.framework.ShareSDK;
 
 public class JSPlatformActionListener implements PlatformActionListener {
@@ -42,6 +44,19 @@ public class JSPlatformActionListener implements PlatformActionListener {
 		this.api = api;
 	}
 	
+	private static HashMap<String, Object> getPlatformDB(Platform platform){
+		HashMap<String, Object> platformDbMap = new HashMap<String, Object>();
+		PlatformDb db = platform.getDb();
+		platformDbMap.put("token", db.getToken());
+		platformDbMap.put("userGender", db.getUserGender());
+		platformDbMap.put("userId", db.getUserId());
+		platformDbMap.put("userName", db.getUserName());
+		platformDbMap.put("userIcon", db.getUserIcon());
+		platformDbMap.put("platformName", db.getPlatformNname());
+		platformDbMap.put("platformVersion", db.getPlatformVersion());
+		return platformDbMap;
+	}
+	
 	public void onComplete(Platform platform, int action, HashMap<String, Object> res) {
 		HashMap<String, Object> resp = new HashMap<String, Object>();
 		resp.put("seqId", seqId);
@@ -51,7 +66,7 @@ public class JSPlatformActionListener implements PlatformActionListener {
 		resp.put("platform", ShareSDK.platformNameToId(platform.getName()));
 		resp.put("data", res);
 		resp.put("action", action);
-		
+		resp.put("platformDb", getPlatformDB(platform));
 		Message msg = new Message();
 		msg.what = ShareSDKUtils.MSG_LOAD_URL;
 		msg.obj = "javascript:" + callback + "(" + hashon.fromHashMap(resp) + ");";

@@ -36,12 +36,17 @@
 
             });
         }
+        
+        function removeAuthBtnClickHandler()
+        {
+        	 $sharesdk.cancelAuthorize($sharesdk.platformID.SinaWeibo);
+        }
 
         function userInfoBtnClickHandler()
         {
-            $sharesdk.getUserInfo($sharesdk.platformID.SinaWeibo, function (platform, state, user, error) {
+            $sharesdk.getUserInfo($sharesdk.platformID.SinaWeibo, function (platform, state, user, db, error) {
 
-                alert("state = " + state + "\nuser = " + user + "\nerror = " + error);
+                alert("state = " + state + "\nuser = " + user +  "\ndb = " + db + "\nerror = " + error);
 
             });
         }
@@ -58,8 +63,8 @@
                 "siteUrl" : "http://sharesdk.cn",
                 "type" : $sharesdk.contentType.Text
             };
-
-            $sharesdk.shareContent($sharesdk.platformID.SinaWeibo, params, function (platform, state, shareInfo, error) {
+            var isSSO = false;
+            $sharesdk.shareContent($sharesdk.platformID.SinaWeibo, params, isSSO, function (platform, state, shareInfo, error) {
 
                 alert("state = " + state + "\nshareInfo = " + shareInfo + "\nerror = " + error);
 
@@ -78,8 +83,9 @@
                 "siteUrl" : "http://sharesdk.cn",
                 "type" : 1
             };
+            var isSSO = true;
 
-            $sharesdk.oneKeyShareContent([$sharesdk.platformID.SinaWeibo, $sharesdk.platformID.TencentWeibo], params, function (platform, state, shareInfo, error) {
+            $sharesdk.oneKeyShareContent([$sharesdk.platformID.SinaWeibo], params, isSSO, function (platform, state, shareInfo, error) {
 
                 alert("state = " + state + "\nshareInfo = " + shareInfo + "\nerror = " + error);
 
@@ -98,8 +104,9 @@
                 "siteUrl" : "http://sharesdk.cn",
                 "type" : 1
             };
+            var isSSO = false;
 
-            $sharesdk.showShareMenu(null, params, 100, 100, $sharesdk.shareMenuArrowDirection.Any, function (platform, state, shareInfo, error) {
+            $sharesdk.showShareMenu(null, params, 100, 100, $sharesdk.shareMenuArrowDirection.Any, isSSO, function (platform, state, shareInfo, error) {
 
                 alert("state = " + state + "\nshareInfo = " + shareInfo + "\nerror = " + error);
 
@@ -125,17 +132,43 @@
 
             });
         }
+        
+        function friendListBtnClickHandler()
+        {
+        	var isSSO = true;
+        	var page = 1;
+        	var count = 10;
+        	var account = "沂谋大爱蓝军";
+            $sharesdk.getFriendList($sharesdk.platformID.SinaWeibo, isSSO, page, count, account, function (platform, state, friendList, error) {
+
+                alert("state = " + state + "\nfriendList = " + friendList + "\nerror = " + error);
+
+            });
+        }
+        
+        function followFriendBtnClickHandler()
+        {	//测试的一个账号
+        	var account = "蜜思Louisette";
+            $sharesdk.followFriend($sharesdk.platformID.SinaWeibo, account, function (platform, state, error) {
+
+                alert("state = " + state +  "\nerror = " + error);
+
+            });
+        }
 
     </script>
-</head>
+</head> 
 <body onload="init()" style="text-align: center">
     <br/><br/>
     <input type="button" value="授权" onclick="authBtnClickHandler()" style="width: 200px; height: 30px;" /><br /><br/>
     <input type="button" value="是否授权" onclick="hasAuthBtnClickHandler()" style="width: 200px; height: 30px;" /><br /><br/>
+    <input type="button" value="取消授权" onclick="removeAuthBtnClickHandler()" style="width: 200px; height: 30px;" /><br /><br/>
     <input type="button" value="获取用户信息" onclick="userInfoBtnClickHandler()" style="width: 200px; height: 30px;" /><br /><br/>
     <input type="button" value="分享内容" onclick="shareContentClickHandler()" style="width: 200px; height: 30px;" /><br /><br/>
     <input type="button" value="一键分享内容" onclick="oneKeyShareContentClickHandler()" style="width: 200px; height: 30px;" /><br /><br/>
     <input type="button" value="显示分享菜单" onclick="showShareMenuClickHandler()" style="width: 200px; height: 30px;" /><br /><br/>
     <input type="button" value="显示分享界面" onclick="showShareViewClickHandler()" style="width: 200px; height: 30px;" /><br /><br/>
+    <input type="button" value="获取好友列表" onclick="friendListBtnClickHandler()" style="width: 200px; height: 30px;" /><br /><br/>
+    <input type="button" value="关注好友" onclick="followFriendBtnClickHandler()" style="width: 200px; height: 30px;" /><br /><br/>
 </body>
 </html>
