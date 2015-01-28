@@ -12,6 +12,10 @@ import cn.sharesdk.framework.PlatformActionListener;
 import cn.sharesdk.framework.PlatformDb;
 import cn.sharesdk.framework.ShareSDK;
 
+/**
+ * Such inherited sharesdk callback interface, added some js callback parameter setting
+ *
+ */
 public class JSPlatformActionListener implements PlatformActionListener {
 	private Callback jsCallback;
 	private Hashon hashon;
@@ -44,6 +48,11 @@ public class JSPlatformActionListener implements PlatformActionListener {
 		this.api = api;
 	}
 	
+	/**
+	 * The Db information encapsulation
+	 * @param platform
+	 * @return
+	 */
 	private static HashMap<String, Object> getPlatformDB(Platform platform){
 		HashMap<String, Object> platformDbMap = new HashMap<String, Object>();
 		PlatformDb db = platform.getDb();

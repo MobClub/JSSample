@@ -2,13 +2,13 @@ package cn.sharesdk.js;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-
 import cn.sharesdk.framework.Platform;
 import cn.sharesdk.framework.Platform.ShareParams;
 import cn.sharesdk.framework.ShareSDK;
 import cn.sharesdk.onekeyshare.OnekeyShare;
 import m.framework.utils.Hashon;
 import m.framework.utils.UIHandler;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Message;
 import android.os.Handler.Callback;
@@ -43,6 +43,7 @@ public class ShareSDKUtils extends WebViewClient implements Callback {
 		return new ShareSDKUtils(webview, wvClient);
 	}
 	
+	@SuppressLint("SetJavaScriptEnabled")
 	private ShareSDKUtils(WebView webview, WebViewClient wbClient) {
 		UIHandler.prepare();
 		hashon = new Hashon();
@@ -111,6 +112,12 @@ public class ShareSDKUtils extends WebViewClient implements Callback {
 		return false;
 	}
 	
+	/**
+	 * callback main method
+	 * Every request is allocated by this function call,
+	 * Including the number of requests, the callback and data
+	 * @param objs
+	 */
 	private void jsCallback(Object[] objs) {
 		String seqId = (String) objs[0];
 		String api = (String) objs[1];
@@ -203,6 +210,7 @@ public class ShareSDKUtils extends WebViewClient implements Callback {
 		return map;
 	}
 	
+	//request fail
 	private void onRequestFailed(String seqId, String api, String callback, String oriCallback, Throwable t) {
 		HashMap<String, Object> resp = new HashMap<String, Object>();
 		resp.put("seqId", seqId);
@@ -224,12 +232,19 @@ public class ShareSDKUtils extends WebViewClient implements Callback {
 	
 	// ============================ Java Actions ============================
 	
+	/**
+	 * To initialize the SDK
+	 * @param params
+	 */
 	private void initSDK(HashMap<String, Object> params) {
 		String appkey = (String) params.get("appkey");
 		boolean enableStatistics = !"false".equals(params.get("enableStatistics"));
 		ShareSDK.initSDK(context, appkey, enableStatistics);
 	}
 	
+	/**
+	 * stop SDK
+	 */
 	private void stopSDK() {
 		ShareSDK.stopSDK(context);
 	}
@@ -246,6 +261,14 @@ public class ShareSDKUtils extends WebViewClient implements Callback {
 //		}
 	}
 	
+	/**
+	 * authorize
+	 * @param seqId
+	 * @param api
+	 * @param callback
+	 * @param oriCallback
+	 * @param params
+	 */
 	private void authorize(String seqId, String api, String callback, String oriCallback, HashMap<String, Object> params) {
 		int platformId = (Integer) params.get("platform");
 		String platformName = ShareSDK.platformIdToName(platformId);
@@ -260,6 +283,10 @@ public class ShareSDKUtils extends WebViewClient implements Callback {
 		platform.authorize();
 	}
 	
+	/**
+	 * Cancel the authorization
+	 * @param params
+	 */
 	private void removeAuthorization(HashMap<String, Object> params) {
 		int platformId = (Integer) params.get("platform");
 		String platformName = ShareSDK.platformIdToName(platformId);
@@ -267,6 +294,11 @@ public class ShareSDKUtils extends WebViewClient implements Callback {
 		platform.removeAccount(true);
 	}
 	
+	/**
+	 * Determine whether the third party platform
+	 * @param params
+	 * @return
+	 */
 	private boolean isVAlid(HashMap<String, Object> params) {
 		int platformId = (Integer) params.get("platform");
 		String platformName = ShareSDK.platformIdToName(platformId);
@@ -274,6 +306,14 @@ public class ShareSDKUtils extends WebViewClient implements Callback {
 		return platform.isValid();
 	}
 	
+	/**
+	 * After landing authorized user information
+	 * @param seqId
+	 * @param api
+	 * @param callback
+	 * @param oriCallback
+	 * @param params
+	 */
 	private void getUserInfo(String seqId, String api, String callback, String oriCallback, HashMap<String, Object> params) {
 		int platformId = (Integer) params.get("platform");
 		String platformName = ShareSDK.platformIdToName(platformId);
@@ -310,6 +350,11 @@ public class ShareSDKUtils extends WebViewClient implements Callback {
 		platform.share(sp);
 	}
 	
+	/**
+	 * The ios type into android type
+	 * @param type
+	 * @return
+	 */
 	private int iosTypeToAndroidType(int type) {
 		switch (type) {
 			case 1: return Platform.SHARE_IMAGE;
@@ -396,6 +441,15 @@ public class ShareSDKUtils extends WebViewClient implements Callback {
 		return null;
 	}
 	
+	/**
+	 * A key to pop up share selection box
+	 * @param seqId
+	 * @param api
+	 * @param callback
+	 * @param oriCallback
+	 * @param params
+	 * @return
+	 */
 	private String showShareView(String seqId, String api, String callback, String oriCallback, HashMap<String, Object> params) {
 		@SuppressWarnings("unchecked")
 		HashMap<String, Object> map = (HashMap<String, Object>) params.get("shareParams");
@@ -444,6 +498,14 @@ public class ShareSDKUtils extends WebViewClient implements Callback {
 		return null;
 	}
 	
+	/**
+	 * Through the accounts say to get friends list
+	 * @param seqId
+	 * @param api
+	 * @param callback
+	 * @param oriCallback
+	 * @param params
+	 */
 	private void getFriendList(String seqId, String api, String callback, String oriCallback, HashMap<String, Object> params){
 		int platformId = (Integer) params.get("platform");
 		boolean isSSO = (Boolean) params.get("isSSO");
@@ -463,7 +525,14 @@ public class ShareSDKUtils extends WebViewClient implements Callback {
 		platform.listFriend(count, page, account);
 	}
 	
-	
+	/**
+	 * Through the accounts say to get friends list
+	 * @param seqId
+	 * @param api
+	 * @param callback
+	 * @param oriCallback
+	 * @param params
+	 */
 	private void followFriend(String seqId, String api, String callback, String oriCallback, HashMap<String, Object> params){
 		int platformId = (Integer) params.get("platform");
 		String friendName = (String) params.get("friendName");
