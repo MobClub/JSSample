@@ -2,10 +2,12 @@ package cn.sharesdk.js;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+
 import cn.sharesdk.framework.Platform;
 import cn.sharesdk.framework.Platform.ShareParams;
 import cn.sharesdk.framework.ShareSDK;
 import cn.sharesdk.onekeyshare.OnekeyShare;
+import cn.sharesdk.onekeyshare.OnekeyShareTheme;
 import m.framework.utils.Hashon;
 import m.framework.utils.UIHandler;
 import android.annotation.SuppressLint;
@@ -424,6 +426,12 @@ public class ShareSDKUtils extends WebViewClient implements Callback {
 			boolean isSSO = (Boolean) params.get("isSSO");
 			if(isSSO){
 				oks.disableSSOWhenAuthorize();
+			}
+			String theme = (String) params.get("theme");
+			if("shybule".equals(theme)){
+				oks.setTheme(OnekeyShareTheme.SKYBLUE);
+			}else {
+				oks.setTheme(OnekeyShareTheme.CLASSIC);
 			}
 			JSPlatformActionListener pa = new JSPlatformActionListener();
 			pa.setCallback(this);

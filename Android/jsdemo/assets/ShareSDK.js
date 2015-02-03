@@ -674,6 +674,7 @@
 
         ShareSDK._callMethod(ShareSDKMethodName.ShareContent, params);
     };
+    
 
     /**
      * 一键分享
@@ -694,6 +695,9 @@
         ShareSDK._callMethod(ShareSDKMethodName.OneKeyShareContent, params);
     };
 
+    
+  
+    
     /**
      * 显示分享菜单
      * @param platforms         分享的目标平台类型集合
@@ -713,6 +717,7 @@
             "y" : y,
             "direction" : direction,
             "isSSO" : isSSO,
+            "theme" : "skyblue",
             "callback" : "(" + callback.toString() + ")"
         };
 
