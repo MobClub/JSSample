@@ -56,7 +56,10 @@ public class JSPlatformActionListener implements PlatformActionListener {
 	private static HashMap<String, Object> getPlatformDB(Platform platform){
 		HashMap<String, Object> platformDbMap = new HashMap<String, Object>();
 		PlatformDb db = platform.getDb();
+		platformDbMap.put("expiresIn", db.getExpiresIn());
+		platformDbMap.put("expiresTime", db.getExpiresTime());
 		platformDbMap.put("token", db.getToken());
+		platformDbMap.put("tokenSecret()", db.getTokenSecret());
 		platformDbMap.put("userGender", db.getUserGender());
 		platformDbMap.put("userId", db.getUserId());
 		platformDbMap.put("userName", db.getUserName());

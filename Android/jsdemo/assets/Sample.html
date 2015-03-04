@@ -21,7 +21,7 @@
 
         function authBtnClickHandler()
         {
-            $sharesdk.authorize($sharesdk.platformID.SinaWeibo, function (platform, state, error){
+            $sharesdk.authorize($sharesdk.platformID.QQ, function (platform, state, error){
 
                 alert("state = " + state + "\nerror = " + error);
 
@@ -30,7 +30,7 @@
 
         function hasAuthBtnClickHandler()
         {
-            $sharesdk.hasAuthorized($sharesdk.platformID.SinaWeibo, function (platform, hasAuth) {
+            $sharesdk.hasAuthorized($sharesdk.platformID.QQ, function (platform, hasAuth) {
 
                 alert("hasAuth = " + hasAuth);
 
@@ -47,6 +47,15 @@
             $sharesdk.getUserInfo($sharesdk.platformID.SinaWeibo, function (platform, state, user, db, error) {
 
                 alert("state = " + state + "\nuser = " + user +  "\ndb = " + db + "\nerror = " + error);
+
+            });
+        }
+        
+        function authInfoBtnClickHandler()
+        {
+            $sharesdk.getAuthInfo($sharesdk.platformID.QQ, function (platform, authInfo) {
+
+                alert("authInfo = " + authInfo);
 
             });
         }
@@ -163,7 +172,7 @@
     <input type="button" value="授权" onclick="authBtnClickHandler()" style="width: 200px; height: 30px;" /><br /><br/>
     <input type="button" value="是否授权" onclick="hasAuthBtnClickHandler()" style="width: 200px; height: 30px;" /><br /><br/>
     <input type="button" value="取消授权" onclick="removeAuthBtnClickHandler()" style="width: 200px; height: 30px;" /><br /><br/>
-    <input type="button" value="获取用户信息" onclick="userInfoBtnClickHandler()" style="width: 200px; height: 30px;" /><br /><br/>
+    <input type="button" value="获取用户信息" onclick="authInfoBtnClickHandler()" style="width: 200px; height: 30px;" /><br /><br/>
     <input type="button" value="分享内容" onclick="shareContentClickHandler()" style="width: 200px; height: 30px;" /><br /><br/>
     <input type="button" value="一键分享内容" onclick="oneKeyShareContentClickHandler()" style="width: 200px; height: 30px;" /><br /><br/>
     <input type="button" value="显示分享菜单" onclick="showShareMenuClickHandler()" style="width: 200px; height: 30px;" /><br /><br/>

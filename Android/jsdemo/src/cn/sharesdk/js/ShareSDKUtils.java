@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import cn.sharesdk.framework.Platform;
+import cn.sharesdk.framework.PlatformDb;
 import cn.sharesdk.framework.Platform.ShareParams;
 import cn.sharesdk.framework.ShareSDK;
 import cn.sharesdk.onekeyshare.OnekeyShare;
@@ -26,6 +27,7 @@ public class ShareSDKUtils extends WebViewClient implements Callback {
 	private static final String API_REMOVE_AUTHORIZATION = "cancelAuthorize";
 	private static final String API_IS_VALID = "hasAuthorized";
 	private static final String API_GET_USER_INFO = "getUserInfo";
+	private static final String API_GET_AUTH_INFO = "getAuthInfo";
 	private static final String API_SHARE = "shareContent";
 	private static final String API_MULTI_SHARE = "oneKeyShareContent";
 	private static final String API_ONE_KEY_SHARE = "showShareMenu";
@@ -161,6 +163,9 @@ public class ShareSDKUtils extends WebViewClient implements Callback {
 		} else if (API_GET_USER_INFO.equals(api)) {
 			getUserInfo(seqId, api, callback, oriCallback, req);
 			return; // callback by JSPlatfromActionListener
+		} else if (API_GET_AUTH_INFO.equals(api)) {
+			resp.put("platform", req.get("platform"));
+			resp.put("data", getAuthInfo(req));
 		} else if (API_SHARE.equals(api)) {
 			share(seqId, api, callback, oriCallback, req);
 			return; // callback by JSPlatfromActionListener
@@ -329,6 +334,29 @@ public class ShareSDKUtils extends WebViewClient implements Callback {
 		platform.setPlatformActionListener(pa);
 		platform.SSOSetting(true);
 		platform.showUser(null);
+	}
+	
+	private String getAuthInfo(HashMap<String, Object> params){
+		String authInfo = "{}";
+		int platformId = (Integer) params.get("platform");
+		String platformName = ShareSDK.platformIdToName(platformId);
+		Platform platform = ShareSDK.getPlatform(context, platformName);
+		if(platform.isValid()){
+			HashMap<String, Object> platformDbMap = new HashMap<String, Object>();
+			PlatformDb db = platform.getDb();
+			platformDbMap.put("expiresIn", db.getExpiresIn());
+			platformDbMap.put("expiresTime", db.getExpiresTime());
+			platformDbMap.put("token", db.getToken());
+			platformDbMap.put("tokenSecret()", db.getTokenSecret());
+			platformDbMap.put("userGender", db.getUserGender());
+			platformDbMap.put("userId", db.getUserId());
+			platformDbMap.put("userName", db.getUserName());
+			platformDbMap.put("userIcon", db.getUserIcon());
+			platformDbMap.put("platformName", db.getPlatformNname());
+			platformDbMap.put("platformVersion", db.getPlatformVersion());
+			authInfo = hashon.fromHashMap(platformDbMap);
+		}
+		return authInfo;
 	}
 	
 	private void share(String seqId, String api, String callback, String oriCallback, HashMap<String, Object> params) {

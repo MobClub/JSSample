@@ -41,7 +41,8 @@
         "ShowShareMenu" : "showShareMenu",
         "ShowShareView" : "showShareView",
         "GetFriendList" : "getFriendList",
-        "FollowFriend" : "followFriend"
+        "FollowFriend" : "followFriend",
+        "GetAuthInfo" : "getAuthInfo"
     };
 
     /**
@@ -208,6 +209,9 @@
                         	break;
                         case ShareSDKMethodName.FollowFriend:
                         	callbackFunc(response.platform, response.state, response.error);
+                        	break;
+                        case ShareSDKMethodName.GetAuthInfo:
+                        	callbackFunc(response.platform, response.data);
                         	break;
                     }
                 }
@@ -654,6 +658,22 @@
         };
 
         ShareSDK._callMethod(ShareSDKMethodName.GetUserInfo, params);
+    };
+    
+    /**
+     * 获取授权信息
+     * @param platform          平台类型
+     * @param callback          回调方法
+     */
+    ShareSDK.getAuthInfo = function (platform, callback)
+    {
+        var params =
+        {
+            "platform" : platform,
+            "callback" : "(" + callback.toString() + ")"
+        };
+
+        ShareSDK._callMethod(ShareSDKMethodName.GetAuthInfo, params);
     };
 
     /**
