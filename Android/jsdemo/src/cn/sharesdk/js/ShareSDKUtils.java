@@ -451,15 +451,19 @@ public class ShareSDKUtils extends WebViewClient implements Callback {
 			if (map.containsKey("siteUrl")) {
 				oks.setSiteUrl(String.valueOf(map.get("siteUrl")));
 			}
-			boolean isSSO = (Boolean) params.get("isSSO");
-			if(isSSO){
-				oks.disableSSOWhenAuthorize();
+			if(params.containsKey("isSSO")){
+				boolean isSSO = (Boolean) params.get("isSSO");
+				if(isSSO){
+					oks.disableSSOWhenAuthorize();
+				}
 			}
-			String theme = (String) params.get("theme");
-			if("shybule".equals(theme)){
-				oks.setTheme(OnekeyShareTheme.SKYBLUE);
-			}else {
-				oks.setTheme(OnekeyShareTheme.CLASSIC);
+			if(params.containsKey("theme")){
+				String theme = (String) params.get("theme");
+				if("shybule".equals(theme)){
+					oks.setTheme(OnekeyShareTheme.SKYBLUE);
+				}else {
+					oks.setTheme(OnekeyShareTheme.CLASSIC);
+				}
 			}
 			JSPlatformActionListener pa = new JSPlatformActionListener();
 			pa.setCallback(this);
