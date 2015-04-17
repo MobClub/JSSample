@@ -55,7 +55,7 @@ public class SSDKWebViewClient extends WebViewClient {
     		shareSDK.onInit();
     		return true;
     	}
-        return wbClient == null ? wbClient.shouldOverrideUrlLoading(view, url) : false;
+        return wbClient != null ? wbClient.shouldOverrideUrlLoading(view, url) : false;
     }
     
     /**
