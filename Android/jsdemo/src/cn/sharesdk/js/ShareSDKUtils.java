@@ -3,21 +3,22 @@ package cn.sharesdk.js;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import cn.sharesdk.framework.Platform;
-import cn.sharesdk.framework.PlatformDb;
-import cn.sharesdk.framework.Platform.ShareParams;
-import cn.sharesdk.framework.ShareSDK;
-import cn.sharesdk.onekeyshare.OnekeyShare;
-import cn.sharesdk.onekeyshare.OnekeyShareTheme;
-import m.framework.utils.Hashon;
-import m.framework.utils.UIHandler;
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.os.Message;
 import android.os.Handler.Callback;
+import android.os.Message;
 import android.util.Log;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import cn.sharesdk.framework.Platform;
+import cn.sharesdk.framework.Platform.ShareParams;
+import cn.sharesdk.framework.PlatformDb;
+import cn.sharesdk.framework.ShareSDK;
+import cn.sharesdk.onekeyshare.OnekeyShare;
+import cn.sharesdk.onekeyshare.OnekeyShareTheme;
+
+import com.mob.tools.utils.Hashon;
+import com.mob.tools.utils.UIHandler;
 
 public class ShareSDKUtils extends WebViewClient implements Callback {
 	private static final String API_OPEN = "open";
@@ -49,7 +50,6 @@ public class ShareSDKUtils extends WebViewClient implements Callback {
 	
 	@SuppressLint("SetJavaScriptEnabled")
 	private ShareSDKUtils(WebView webview, WebViewClient wbClient) {
-		UIHandler.prepare();
 		hashon = new Hashon();
 		
 		this.webview = webview;

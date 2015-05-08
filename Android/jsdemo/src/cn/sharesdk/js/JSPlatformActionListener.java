@@ -3,14 +3,15 @@ package cn.sharesdk.js;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import m.framework.utils.Hashon;
-import m.framework.utils.UIHandler;
 import android.os.Handler.Callback;
 import android.os.Message;
 import cn.sharesdk.framework.Platform;
 import cn.sharesdk.framework.PlatformActionListener;
 import cn.sharesdk.framework.PlatformDb;
 import cn.sharesdk.framework.ShareSDK;
+
+import com.mob.tools.utils.Hashon;
+import com.mob.tools.utils.UIHandler;
 
 /**
  * Such inherited sharesdk callback interface, added some js callback parameter setting
