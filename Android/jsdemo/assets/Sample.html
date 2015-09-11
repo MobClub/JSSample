@@ -6,7 +6,6 @@
     <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
     <script language="javascript" type="text/javascript" src="ShareSDK.js"></script>
     <script language="javascript" type="text/javascript">
-
         function init()
         {
             $sharesdk.open("iosv1101", true);
@@ -16,7 +15,7 @@
             sinaConf["app_secret"] = "38a4f8204cc784f81f9f0daaf31e02e3";
             sinaConf["redirect_uri"] = "http://www.sharesdk.cn";
             $sharesdk.setPlatformConfig($sharesdk.platformID.SinaWeibo, sinaConf);
-
+            alert("initSDK");
         }
 
         function authBtnClickHandler()
